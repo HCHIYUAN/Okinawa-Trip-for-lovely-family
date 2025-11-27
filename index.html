@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>女王的沖繩生日之旅</title>
+    <!-- 引入 React 和 Tailwind -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up { animation: fade-in-up 0.5s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-pink-50 text-gray-800">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // 簡單的圖標組件 (SVG)
+        const Icon = ({ path, color = "currentColor", size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                {path}
+            </svg>
+        );
+
+        const Heart = (props) => <Icon {...props} path={<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>} />;
+        const Coffee = (props) => <Icon {...props} path={<><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></>} />;
+        const Utensils = (props) => <Icon {...props} path={<><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></>} />;
+        const Baby = (props) => <Icon {...props} path={<><circle cx="12" cy="5" r="3"></circle><path d="M9 12h6"></path><path d="M14.5 18a2.5 2.5 0 0 0-5 0"></path><path d="M6 10v4a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4v-4"></path></>} />; // 簡化版 Baby
+        const MapPin = (props) => <Icon {...props} path={<><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></>} />;
+        const ShoppingBag = (props) => <Icon {...props} path={<><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></>} />;
+        const Sun = (props) => <Icon {...props} path={<><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></>} />;
+        const CloudRain = (props) => <Icon {...props} path={<><line x1="16" y1="13" x2="16" y2="21"></line><line x1="8" y1="13" x2="8" y2="21"></line><line x1="12" y1="15" x2="12" y2="23"></line><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"></path></>} />;
+        const Gift = (props) => <Icon {...props} path={<><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></>} />;
+        const Music = (props) => <Icon {...props} path={<><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></>} />;
+        const Star = (props) => <Icon {...props} path={<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>} />;
+        const Camera = (props) => <Icon {...props} path={<><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></>} />;
+        const Fish = (props) => <Icon {...props} path={<path d="M20.3 19.3L15.4 15.4C15.1 15.1 14.7 15 14.2 15H14C12.9 15 12 14.1 12 13V12C12 10.9 12.9 10 14 10H14.2C14.7 10 15.1 9.9 15.4 9.6L20.3 5.7C20.9 5.2 22 5.5 22 6.4V18.7C22 19.5 20.9 19.9 20.3 19.3ZM6 13C3.8 13 2 11.2 2 9C2 6.8 3.8 5 6 5C8.2 5 10 6.8 10 9C10 11.2 8.2 13 6 13Z"></path>} />;
+        const Car = (props) => <Icon {...props} path={<path d="M14 16H9m10-9h-4l-1-2H10L9 7H5a2 2 0 0 0-2 2v6h2m14 0h2v-6a2 2 0 0 0-2-2ZM7 16a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm14 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"></path>} />;
+
+        const ItineraryApp = () => {
+            const [activeTab, setActiveTab] = React.useState('day1');
+
+            const itinerary = {
+                day1: {
+                    date: '12/23 (一)',
+                    title: '啟程與聖誕初夜',
+                    highlight: '美國村璀璨燈飾',
+                    details: [
+                        { time: '18:30', activity: '抵達沖繩 & 取車', icon: <MapPin className="text-blue-500" />, note: '爸爸負責處理租車手續，媽媽休息' },
+                        { time: '20:30', activity: '入住 Vessel Hotel Campana', icon: <Star className="text-yellow-500" />, note: '海景房，我們接下來四天的家' },
+                        { time: '21:00', activity: '暖心晚餐', icon: <Utensils className="text-red-400" />, note: 'A&W 漢堡或 Taco Rice，輕鬆解決' },
+                        { time: '22:00', activity: '浪漫聖誕散步', icon: <Heart className="text-pink-500" />, note: '飯店樓下就是 Depot Island，全沖繩最美的聖誕燈海，帶女兒放電拍照' }
+                    ]
+                },
+                day2: {
+                    date: '12/24 (二)',
+                    title: '平安夜：親子樂園與大餐',
+                    highlight: '兒童王國 & 希爾頓聖誕晚餐',
+                    details: [
+                        { time: '09:00', activity: '飯店早餐', icon: <Coffee className="text-amber-600" />, note: '享受豐富的沖繩在地料理' },
+                        { time: '09:40', activity: '沖繩兒童王國 (Zoo)', icon: <Baby className="text-orange-500" />, note: '離飯店不遠！有大象、長頸鹿還可以餵動物，女兒絕對愛死這裡' },
+                        { time: '12:30', activity: 'Aeon Rycom 午餐+逛街', icon: <ShoppingBag className="text-blue-400" />, note: '就在動物園附近。午餐在美食街解決(選擇多)，順便採購高爾夫配件' },
+                        { time: '16:00', activity: '返回美國村', icon: <Sun className="text-yellow-400" />, note: '傍晚的美國村最美，沿著海堤散步晃晃，感受濃濃耶誕氣氛' },
+                        { time: '18:30', activity: '【平安夜大餐】希爾頓 Suri.y', icon: <Gift className="text-red-500" />, note: '就在飯店隔壁！五星級 Buffet，有熟食、麵包水果，環境優雅舒適' }
+                    ]
+                },
+                day3: {
+                    date: '12/25 (三)',
+                    title: '聖誕節：鯨鯊與宮里麵',
+                    highlight: '15:00 餵食秀 & 兜風補眠',
+                    details: [
+                        { time: '10:00', activity: '睡飽飽出發', icon: <Car className="text-blue-500" />, note: '不用趕時間，悠閒出門往北部開' },
+                        { time: '11:00', activity: '中途休息：許田休息站', icon: <MapPin className="text-green-600" />, note: '日本第一休息站，買個點心伸展筋骨，順便買水族館優惠票' },
+                        { time: '12:00', activity: '午餐：宮里麵 (名護)', icon: <Utensils className="text-red-400" />, note: '在地名店！有榻榻米適合小孩，招牌沖繩麵與吐司，簡單美味' },
+                        { time: '13:00', activity: '兜風午睡時光', icon: <Sun className="text-yellow-400" />, note: '開往水族館的路上讓女兒補眠，爸爸享受沿海駕駛樂趣' },
+                        { time: '15:00', activity: '【必看】黑潮之海餵食秀', icon: <Fish className="text-indigo-500" />, note: '水族館最高潮！看巨大的鯨鯊直立進食，震撼度滿分' },
+                        { time: '18:00', activity: '晚餐：Aeon Mall', icon: <ShoppingBag className="text-blue-400" />, note: '回程去 Aeon (名護店或來客夢店皆可)，吃飽喝足再回飯店' }
+                    ]
+                },
+                day4: {
+                    date: '12/26 (四)',
+                    title: '抹茶女王的一日',
+                    highlight: '水圓麵包 & Nana\'s Green Tea',
+                    details: [
+                        { time: '10:30', activity: '【秘境】水圓麵包 (Suien)', icon: <Heart className="text-pink-500" />, note: '彷彿走進童話森林！這天剛好有開，買剛出爐的麵包拍美照' },
+                        { time: '12:00', activity: 'Parco City 購物', icon: <ShoppingBag className="text-purple-500" />, note: '阿卡將買育兒用品' },
+                        { time: '13:00', activity: '【女王時光】Nana\'s Green Tea', icon: <Coffee className="text-green-600" />, note: '面對無敵海景享用抹茶白玉百匯，爸爸負責顧小孩' },
+                        { time: '16:00', activity: '日落咖啡：Zhyvago', icon: <Sun className="text-orange-400" />, note: '就在飯店附近，點一杯低咖啡因拿鐵看夕陽' },
+                        { time: '18:30', activity: '晚餐：串角燒鳥', icon: <Utensils className="text-red-400" />, note: '有包廂榻榻米，全熟串燒與雞肉丸子飯' }
+                    ]
+                },
+                day5: {
+                    date: '12/27 (五)',
+                    title: 'Happy Birthday My Queen',
+                    highlight: '高爾夫戰場 & DMM 水族館',
+                    details: [
+                        { time: '08:00', activity: '生日快樂！飯店早餐', icon: <Gift className="text-pink-500" />, note: '在最愛的早餐中開啟新的一歲' },
+                        { time: '10:30', activity: 'DMM 水族館 & Outlet', icon: <Music className="text-blue-500" />, note: '分進合擊！媽媽帶女兒看企鵝(室內不累)，爸爸去對面買球衣' },
+                        { time: '13:00', activity: '生日午餐：敘敘苑燒肉', icon: <Star className="text-yellow-500" />, note: '午間套餐CP值高，環境好，為旅程畫下完美句點' },
+                        { time: '14:30', activity: '最後採購：抹茶年輪蛋糕', icon: <ShoppingBag className="text-green-600" />, note: 'Fukugiya 濃郁抹茶年輪，機場前最後一站' },
+                        { time: '17:30', activity: '抵達機場', icon: <MapPin className="text-gray-500" />, note: '滿載而歸，回家囉' }
+                    ]
+                }
+            };
+
+            const essentials = [
+                { title: '女王最愛', items: ['水圓鄉村麵包', 'Nana\'s 抹茶百匯', '低咖啡因拿鐵', 'Hilton 聖誕氣氛'] },
+                { title: '寶寶專區', items: ['兒童王國看大象', '茶碗蒸 & 烏龍麵', '車上午睡充電', 'DMM 企鵝'] },
+                { title: '爸爸任務', items: ['高爾夫球衣採購', '宮里麵擔當', '安全駕駛', '顧好女兒讓太座逛街'] },
+            ];
+
+            return (
+                <div className="min-h-screen bg-pink-50 pb-10">
+                    {/* Header Section */}
+                    <header className="bg-gradient-to-r from-pink-300 to-rose-400 text-white p-6 rounded-b-[30px] shadow-lg relative overflow-hidden">
+                        <div className="absolute top-0 right-0 opacity-20 transform translate-x-10 -translate-y-10">
+                            <Heart size={150} color="white" />
+                        </div>
+                        <div className="relative z-10">
+                            <h1 className="text-2xl font-bold mb-1">女王的沖繩生日之旅</h1>
+                            <p className="text-sm opacity-90">12/23 - 12/27 ｜ 5 Days 4 Nights</p>
+                            <div className="mt-4 flex items-center gap-2 bg-white/20 backdrop-blur-sm p-3 rounded-lg inline-flex">
+                                <Gift size={18} />
+                                <span className="text-sm font-medium">慶祝太太生日 & 聖誕節快樂</span>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Navigation Tabs */}
+                    <div className="flex overflow-x-auto p-4 gap-3 no-scrollbar snap-x">
+                        {Object.entries(itinerary).map(([key, day]) => (
+                            <button
+                                key={key}
+                                onClick={() => setActiveTab(key)}
+                                className={`snap-center flex-shrink-0 px-5 py-3 rounded-xl transition-all shadow-sm ${
+                                    activeTab === key
+                                        ? 'bg-rose-500 text-white shadow-rose-200'
+                                        : 'bg-white text-gray-600 hover:bg-rose-50'
+                                }`}
+                            >
+                                <div className="text-xs font-medium opacity-80">{day.date}</div>
+                                <div className="font-bold text-sm">{key === 'day5' ? '🎂 生日' : `Day ${key.replace('day', '')}`}</div>
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Main Content Area */}
+                    <main className="px-4 animate-fade-in-up">
+                        <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-pink-100">
+                            
+                            {/* Day Header */}
+                            <div className="bg-rose-50 p-5 border-b border-rose-100">
+                                <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                                    {itinerary[activeTab].title}
+                                    {activeTab === 'day5' && <span className="animate-bounce"><Gift className="text-rose-500" size={20} /></span>}
+                                </h2>
+                                <div className="mt-2 flex items-center gap-2 text-rose-600 text-sm font-medium bg-white px-3 py-1 rounded-full w-fit shadow-sm">
+                                    <Star size={14} className="text-rose-600" />
+                                    <span>亮點：{itinerary[activeTab].highlight}</span>
+                                </div>
+                            </div>
+
+                            {/* Timeline Details */}
+                            <div className="p-5 space-y-6">
+                                {itinerary[activeTab].details.map((item, index) => (
+                                    <div key={index} className="flex gap-4 relative">
+                                        {/* Timeline Line */}
+                                        {index !== itinerary[activeTab].details.length - 1 && (
+                                            <div className="absolute left-[19px] top-8 bottom-[-24px] w-0.5 bg-gray-100"></div>
+                                        )}
+                                        
+                                        {/* Icon Bubble */}
+                                        <div className="relative z-10 w-10 h-10 rounded-full bg-white border-2 border-pink-100 flex items-center justify-center shadow-sm shrink-0">
+                                            {item.icon}
+                                        </div>
+
+                                        {/* Content */}
+                                        <div className="flex-1 pt-1">
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <span className="text-sm font-bold text-rose-500 bg-rose-50 px-2 py-0.5 rounded">{item.time}</span>
+                                                <h3 className="font-bold text-gray-800">{item.activity}</h3>
+                                            </div>
+                                            <p className="text-gray-600 text-sm leading-relaxed bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                                {item.note}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Essentials Cards */}
+                        <div className="mt-8 grid grid-cols-1 gap-4">
+                            <h3 className="text-lg font-bold text-gray-700 ml-1">旅行小貼士</h3>
+                            {essentials.map((section, idx) => (
+                                <div key={idx} className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                                    <h4 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                        {idx === 0 && <Heart className="text-rose-400" size={18}/>}
+                                        {idx === 1 && <Baby className="text-blue-400" size={18}/>}
+                                        {idx === 2 && <ShoppingBag className="text-green-600" size={18}/>}
+                                        {section.title}
+                                    </h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {section.items.map((item, i) => (
+                                            <span key={i} className="text-xs font-medium px-3 py-1.5 bg-gray-50 text-gray-600 rounded-full border border-gray-200">
+                                                {item}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Rain Plan */}
+                        <div className="mt-6 bg-blue-50 p-5 rounded-xl border border-blue-100 mb-6">
+                            <h4 className="font-bold text-blue-800 mb-2 flex items-center gap-2">
+                                <CloudRain size={18} />
+                                雨天也不怕 (B計畫)
+                            </h4>
+                            <p className="text-sm text-blue-700">
+                                如果兒童王國下雨，我們就直奔 <strong>Aeon Rycom</strong> 或 <strong>DMM 水族館</strong>。商場內皆好停車且直通室內，媽媽可以優雅地吃抹茶甜點，爸爸帶小孩去遊戲區！
+                            </p>
+                        </div>
+                    </main>
+                </div>
+            );
+        };
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<ItineraryApp />);
+    </script>
+</body>
+</html>
