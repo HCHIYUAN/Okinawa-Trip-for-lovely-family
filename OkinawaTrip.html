@@ -1,0 +1,193 @@
+import React, { useState } from 'react';
+import { Heart, Coffee, Utensils, Baby, MapPin, ShoppingBag, Sun, CloudRain, Gift, Music, Star, Camera, Fish, Car } from 'lucide-react';
+
+const ItineraryApp = () => {
+  const [activeTab, setActiveTab] = useState('day1');
+
+  const itinerary = {
+    day1: {
+      date: '12/23 (一)',
+      title: '啟程與聖誕初夜',
+      highlight: '美國村璀璨燈飾',
+      details: [
+        { time: '18:30', activity: '抵達沖繩 & 取車', icon: <MapPin className="text-blue-500" />, note: '爸爸負責處理租車手續，媽媽休息' },
+        { time: '20:30', activity: '入住 Vessel Hotel Campana', icon: <Star className="text-yellow-500" />, note: '海景房，我們接下來四天的家' },
+        { time: '21:00', activity: '暖心晚餐', icon: <Utensils className="text-red-400" />, note: 'A&W 漢堡或 Taco Rice，輕鬆解決' },
+        { time: '22:00', activity: '浪漫聖誕散步', icon: <Heart className="text-pink-500" />, note: '飯店樓下就是 Depot Island，全沖繩最美的聖誕燈海，帶女兒放電拍照' }
+      ]
+    },
+    day2: {
+      date: '12/24 (二)',
+      title: '平安夜：親子樂園與大餐',
+      highlight: '兒童王國 & 希爾頓聖誕晚餐',
+      details: [
+        { time: '09:00', activity: '飯店早餐', icon: <Coffee className="text-amber-600" />, note: '享受豐富的沖繩在地料理' },
+        { time: '09:40', activity: '沖繩兒童王國 (Zoo)', icon: <Baby className="text-orange-500" />, note: '離飯店不遠！有大象、長頸鹿還可以餵動物，女兒絕對愛死這裡' },
+        { time: '12:30', activity: 'Aeon Rycom 午餐+逛街', icon: <ShoppingBag className="text-blue-400" />, note: '就在動物園附近。午餐在美食街解決(選擇多)，順便採購高爾夫配件' },
+        { time: '16:00', activity: '返回美國村', icon: <Sun className="text-yellow-400" />, note: '傍晚的美國村最美，沿著海堤散步晃晃，感受濃濃耶誕氣氛' },
+        { time: '18:30', activity: '【平安夜大餐】希爾頓 Suri.y', icon: <Gift className="text-red-500" />, note: '就在飯店隔壁！五星級 Buffet，有熟食、麵包水果，環境優雅舒適' }
+      ]
+    },
+    day3: {
+      date: '12/25 (三)',
+      title: '聖誕節：鯨鯊與宮里麵',
+      highlight: '15:00 餵食秀 & 兜風補眠',
+      details: [
+        { time: '10:00', activity: '睡飽飽出發', icon: <Car className="text-blue-500" />, note: '不用趕時間，悠閒出門往北部開' },
+        { time: '11:00', activity: '中途休息：許田休息站', icon: <MapPin className="text-green-600" />, note: '日本第一休息站，買個點心伸展筋骨，順便買水族館優惠票' },
+        { time: '12:00', activity: '午餐：宮里麵 (名護)', icon: <Utensils className="text-red-400" />, note: '在地名店！有榻榻米適合小孩，招牌沖繩麵與吐司，簡單美味' },
+        { time: '13:00', activity: '兜風午睡時光', icon: <Sun className="text-yellow-400" />, note: '開往水族館的路上讓女兒補眠，爸爸享受沿海駕駛樂趣' },
+        { time: '15:00', activity: '【必看】黑潮之海餵食秀', icon: <Fish className="text-indigo-500" />, note: '水族館最高潮！看巨大的鯨鯊直立進食，震撼度滿分' },
+        { time: '18:00', activity: '晚餐：Aeon Mall', icon: <ShoppingBag className="text-blue-400" />, note: '回程去 Aeon (名護店或來客夢店皆可)，吃飽喝足再回飯店' }
+      ]
+    },
+    day4: {
+      date: '12/26 (四)',
+      title: '抹茶女王的一日',
+      highlight: '水圓麵包 & Nana\'s Green Tea',
+      details: [
+        { time: '10:30', activity: '【秘境】水圓麵包 (Suien)', icon: <Heart className="text-pink-500" />, note: '彷彿走進童話森林！這天剛好有開，買剛出爐的麵包拍美照' },
+        { time: '12:00', activity: 'Parco City 購物', icon: <ShoppingBag className="text-purple-500" />, note: '阿卡將買育兒用品' },
+        { time: '13:00', activity: '【女王時光】Nana\'s Green Tea', icon: <Coffee className="text-green-600" />, note: '面對無敵海景享用抹茶白玉百匯，爸爸負責顧小孩' },
+        { time: '16:00', activity: '日落咖啡：Zhyvago', icon: <Sun className="text-orange-400" />, note: '就在飯店附近，點一杯低咖啡因拿鐵看夕陽' },
+        { time: '18:30', activity: '晚餐：串角燒鳥', icon: <Utensils className="text-red-400" />, note: '有包廂榻榻米，全熟串燒與雞肉丸子飯' }
+      ]
+    },
+    day5: {
+      date: '12/27 (五)',
+      title: 'Happy Birthday My Queen',
+      highlight: '高爾夫戰場 & DMM 水族館',
+      details: [
+        { time: '08:00', activity: '生日快樂！飯店早餐', icon: <Gift className="text-pink-500" />, note: '在最愛的早餐中開啟新的一歲' },
+        { time: '10:30', activity: 'DMM 水族館 & Outlet', icon: <Music className="text-blue-500" />, note: '分進合擊！媽媽帶女兒看企鵝(室內不累)，爸爸去對面買球衣' },
+        { time: '13:00', activity: '生日午餐：敘敘苑燒肉', icon: <Star className="text-yellow-500" />, note: '午間套餐CP值高，環境好，為旅程畫下完美句點' },
+        { time: '14:30', activity: '最後採購：抹茶年輪蛋糕', icon: <ShoppingBag className="text-green-600" />, note: 'Fukugiya 濃郁抹茶年輪，機場前最後一站' },
+        { time: '17:30', activity: '抵達機場', icon: <MapPin className="text-gray-500" />, note: '滿載而歸，回家囉' }
+      ]
+    }
+  };
+
+  const essentials = [
+    { title: '女王最愛', items: ['水圓鄉村麵包', 'Nana\'s 抹茶百匯', '低咖啡因拿鐵', 'Hilton 聖誕氣氛'] },
+    { title: '寶寶專區', items: ['兒童王國看大象', '茶碗蒸 & 烏龍麵', '車上午睡充電', 'DMM 企鵝'] },
+    { title: '爸爸任務', items: ['高爾夫球衣採購', '宮里麵擔當', '安全駕駛', '顧好女兒讓太座逛街'] },
+  ];
+
+  return (
+    <div className="min-h-screen bg-pink-50 font-sans pb-10">
+      {/* Header Section */}
+      <header className="bg-gradient-to-r from-pink-300 to-rose-400 text-white p-6 rounded-b-[30px] shadow-lg relative overflow-hidden">
+        <div className="absolute top-0 right-0 opacity-20 transform translate-x-10 -translate-y-10">
+          <Heart size={150} fill="white" />
+        </div>
+        <div className="relative z-10">
+          <h1 className="text-2xl font-bold mb-1">女王的沖繩生日之旅</h1>
+          <p className="text-sm opacity-90">12/23 - 12/27 ｜ 5 Days 4 Nights</p>
+          <div className="mt-4 flex items-center gap-2 bg-white/20 backdrop-blur-sm p-3 rounded-lg inline-flex">
+            <Gift size={18} />
+            <span className="text-sm font-medium">慶祝太太生日 & 聖誕節快樂</span>
+          </div>
+        </div>
+      </header>
+
+      {/* Navigation Tabs */}
+      <div className="flex overflow-x-auto p-4 gap-3 no-scrollbar snap-x">
+        {Object.entries(itinerary).map(([key, day]) => (
+          <button
+            key={key}
+            onClick={() => setActiveTab(key)}
+            className={`snap-center flex-shrink-0 px-5 py-3 rounded-xl transition-all shadow-sm ${
+              activeTab === key
+                ? 'bg-rose-500 text-white shadow-rose-200'
+                : 'bg-white text-gray-600 hover:bg-rose-50'
+            }`}
+          >
+            <div className="text-xs font-medium opacity-80">{day.date}</div>
+            <div className="font-bold text-sm">{key === 'day5' ? '🎂 生日' : `Day ${key.replace('day', '')}`}</div>
+          </button>
+        ))}
+      </div>
+
+      {/* Main Content Area */}
+      <main className="px-4 animate-fade-in-up">
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-pink-100">
+          
+          {/* Day Header */}
+          <div className="bg-rose-50 p-5 border-b border-rose-100">
+            <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+              {itinerary[activeTab].title}
+              {activeTab === 'day5' && <Gift className="text-rose-500 animate-bounce" size={20} />}
+            </h2>
+            <div className="mt-2 flex items-center gap-2 text-rose-600 text-sm font-medium bg-white px-3 py-1 rounded-full w-fit shadow-sm">
+              <Star size={14} fill="currentColor" />
+              <span>亮點：{itinerary[activeTab].highlight}</span>
+            </div>
+          </div>
+
+          {/* Timeline Details */}
+          <div className="p-5 space-y-6">
+            {itinerary[activeTab].details.map((item, index) => (
+              <div key={index} className="flex gap-4 relative">
+                {/* Timeline Line */}
+                {index !== itinerary[activeTab].details.length - 1 && (
+                  <div className="absolute left-[19px] top-8 bottom-[-24px] w-0.5 bg-gray-100"></div>
+                )}
+                
+                {/* Icon Bubble */}
+                <div className="relative z-10 w-10 h-10 rounded-full bg-white border-2 border-pink-100 flex items-center justify-center shadow-sm shrink-0">
+                  {item.icon}
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 pt-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-sm font-bold text-rose-500 bg-rose-50 px-2 py-0.5 rounded">{item.time}</span>
+                    <h3 className="font-bold text-gray-800">{item.activity}</h3>
+                  </div>
+                  <p className="text-gray-600 text-sm leading-relaxed bg-gray-50 p-3 rounded-lg border border-gray-100">
+                    {item.note}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Essentials Cards */}
+        <div className="mt-8 grid grid-cols-1 gap-4">
+          <h3 className="text-lg font-bold text-gray-700 ml-1">旅行小貼士</h3>
+          {essentials.map((section, idx) => (
+            <div key={idx} className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+              <h4 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                {idx === 0 && <Heart className="text-rose-400" size={18}/>}
+                {idx === 1 && <Baby className="text-blue-400" size={18}/>}
+                {idx === 2 && <ShoppingBag className="text-green-600" size={18}/>}
+                {section.title}
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {section.items.map((item, i) => (
+                  <span key={i} className="text-xs font-medium px-3 py-1.5 bg-gray-50 text-gray-600 rounded-full border border-gray-200">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Rain Plan */}
+        <div className="mt-6 bg-blue-50 p-5 rounded-xl border border-blue-100 mb-6">
+          <h4 className="font-bold text-blue-800 mb-2 flex items-center gap-2">
+            <CloudRain size={18} />
+            雨天也不怕 (B計畫)
+          </h4>
+          <p className="text-sm text-blue-700">
+            如果兒童王國下雨，我們就直奔 <strong>Aeon Rycom</strong> 或 <strong>DMM 水族館</strong>。商場內皆好停車且直通室內，媽媽可以優雅地吃抹茶甜點，爸爸帶小孩去遊戲區！
+          </p>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default ItineraryApp;
