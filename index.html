@@ -2,16 +2,18 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>女王的沖繩生日之旅</title>
 
-    <!-- PWA/Icon 設定 (使用同目錄下的 icon.png) -->
+    <!-- PWA/Icon 設定 -->
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="沖繩之旅">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
+    <!-- 設定 Android Chrome 主題色，讓狀態列與 APP 融合 -->
+    <meta name="theme-color" content="#fff1f2">
 
     <!-- 引入 React 和 Tailwind -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -50,7 +52,30 @@
         @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap');
         
-        body { font-family: 'Noto Sans TC', sans-serif; -webkit-tap-highlight-color: transparent; }
+        /* APP 質感全域設定 */
+        html {
+            /* 防止 iOS 橡皮筋回彈效果 */
+            overscroll-behavior-y: none;
+        }
+        
+        body { 
+            font-family: 'Noto Sans TC', sans-serif; 
+            /* 移除點擊高亮 */
+            -webkit-tap-highlight-color: transparent; 
+            /* 禁止選取文字 (像 App 一樣) */
+            -webkit-user-select: none;
+            user-select: none;
+            /* 確保填滿螢幕 */
+            min-height: 100vh;
+            background-color: #fff1f2;
+        }
+
+        /* 恢復輸入框的文字選取功能 */
+        input, textarea {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
         .font-script { font-family: 'Great Vibes', cursive; }
         .font-cute { font-family: 'Zen Maru Gothic', sans-serif; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -63,6 +88,14 @@
         }
         .custom-checkbox:checked + div svg {
             display: block;
+        }
+
+        /* 安全區域設定 (針對 iPhone X 以上機型) */
+        .safe-top {
+            padding-top: env(safe-area-inset-top);
+        }
+        .safe-bottom {
+            padding-bottom: env(safe-area-inset-bottom);
         }
     </style>
 </head>
@@ -332,12 +365,12 @@
                 day2: {
                     date: '12/24 (二)',
                     title: '平安夜：親子與大餐',
-                    highlight: '兒童王國 & 涮涮鍋',
+                    highlight: '兒童王國 & 希爾頓',
                     details: [
                         { time: '09:00', activity: '飯店早餐', icon: <Icons.Coffee className="text-amber-600" />, note: '享用豐富在地料理', loc: 'Vessel Hotel Campana Okinawa' },
                         { time: '09:40', activity: '沖繩兒童王國', icon: <Icons.Baby className="text-orange-500" />, note: '餵動物、看大象，女兒放電天堂', loc: 'Okinawa Zoo & Museum' },
                         { time: '12:30', activity: 'Aeon Rycom', icon: <Icons.ShoppingBag className="text-blue-400" />, note: '午餐與逛街，不看高爾夫，專心陪家人', loc: 'AEON MALL Okinawa Rycom' },
-                        { time: '18:30', activity: 'Agu豬涮涮鍋', icon: <Icons.Gift className="text-red-500" />, note: '【島什錦鍋物】清爽湯頭煮鮮甜Agu豬，溫暖又健康，太座最愛！', loc: '島しゃぶしゃぶNAKAMA' }
+                        { time: '18:30', activity: '希爾頓自助晚餐', icon: <Icons.Gift className="text-red-500" />, note: '聖誕大餐！享用豐富多樣的自助料理，慶祝美好平安夜。', loc: 'Hilton Okinawa Chatan Resort' }
                     ]
                 },
                 day3: {
@@ -366,12 +399,13 @@
                 day5: {
                     date: '12/27 (五)',
                     title: '生日快樂 & 歸途',
-                    highlight: 'DMM 水族館 & 慶生',
+                    highlight: 'DMM 水族館 & 世界第一蘋果派',
                     details: [
-                        { time: '08:00', activity: '生日快樂！', icon: <Icons.Gift className="text-pink-500" />, note: '飯店早餐慶生', loc: 'Vessel Hotel Campana Okinawa' },
-                        { time: '10:30', activity: 'DMM 水族館 (iias)', icon: <Icons.Music className="text-blue-500" />, note: '室內水族館，踩透明地板', loc: 'DMM Kariyushi Aquarium' },
-                        { time: '13:00', activity: '敘敘苑燒肉', icon: <Icons.Star className="text-yellow-500" />, note: '生日大餐 (iias 商場內)', loc: 'Jojoen Okinawa Parco City' },
-                        { time: '17:00', activity: '還車', icon: <Icons.Car className="text-gray-500" />, note: '臨空豐崎營業所還車', loc: 'OTS Rent-a-car Rinku Toyosaki' },
+                        { time: '08:00', activity: '生日快樂！', icon: <Icons.Gift className="text-pink-500" />, note: '飯店早餐慶生，悠閒整理行李', loc: 'Vessel Hotel Campana Okinawa' },
+                        { time: '10:30', activity: 'DMM 水族館 (iias)', icon: <Icons.Music className="text-blue-500" />, note: '最新的影像水族館，夢幻且適合拍照', loc: 'DMM Kariyushi Aquarium' },
+                        { time: '13:00', activity: 'Steak House 88', icon: <Icons.Utensils className="text-red-500" />, note: '【午餐】沖繩老牌牛排館！就在商場內，大口吃肉慶生！', loc: 'Steak House 88 iias Okinawa Toyosaki' },
+                        { time: '15:30', activity: '瀨長島 Umikaji Terrace', icon: <Icons.Heart className="text-rose-500" />, note: '【必吃】Mille Mele 世界第一蘋果派！看飛機起降的絕美景點。', loc: 'Senagajima Umikaji Terrace' },
+                        { time: '17:00', activity: '還車', icon: <Icons.Car className="text-gray-500" />, note: 'OTS 臨空豐崎營業所還車 (記得加滿油)', loc: 'OTS Rent-a-car Rinku Toyosaki' },
                         { time: '19:30', activity: '飛機起飛 (CI133)', icon: <Icons.Plane className="text-blue-500" />, note: '帶著滿滿回憶回家', loc: '' }
                     ]
                 }
@@ -475,7 +509,7 @@
                 <div className="min-h-screen pb-20 fade-enter-active max-w-md mx-auto bg-rose-50 shadow-2xl overflow-hidden relative">
                     
                     {/* Header */}
-                    <header className="bg-gradient-to-br from-rose-400 via-rose-500 to-pink-600 text-white pt-8 pb-6 px-6 rounded-b-[40px] shadow-lg relative overflow-hidden z-20">
+                    <header className="safe-top bg-gradient-to-br from-rose-400 via-rose-500 to-pink-600 text-white pt-8 pb-6 px-6 rounded-b-[40px] shadow-lg relative overflow-hidden z-20">
                         <div className="absolute top-0 right-0 opacity-10 transform translate-x-10 -translate-y-10">
                             <Icons.Heart size={180} />
                         </div>
@@ -519,7 +553,7 @@
                                 </div>
 
                                 {/* 行程卡片 */}
-                                <div className="px-4 animate-[fadeIn_0.5s_ease-out] pb-24">
+                                <div className="px-4 animate-[fadeIn_0.5s_ease-out] pb-24 safe-bottom">
                                     <div className="bg-white rounded-[32px] shadow-lg shadow-pink-100 overflow-hidden border border-pink-50">
                                         <div className="bg-gradient-to-r from-rose-50 to-pink-50 p-5 border-b border-rose-100 flex justify-between items-center">
                                             <div>
@@ -589,7 +623,7 @@
                     </main>
 
                     {/* 底部導航列 */}
-                    <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 w-[90%] max-w-[400px] bg-white rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.1)] p-2 flex justify-between items-center z-40 border border-gray-100">
+                    <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 w-[90%] max-w-[400px] bg-white rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.1)] p-2 flex justify-between items-center z-40 border border-gray-100 safe-bottom">
                         <button 
                             onClick={() => setView('itinerary')}
                             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-full transition-all duration-300 ${view === 'itinerary' ? 'bg-gray-800 text-white shadow-lg' : 'text-gray-400 hover:bg-gray-50'}`}
