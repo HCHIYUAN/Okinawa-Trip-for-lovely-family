@@ -506,7 +506,11 @@
                             <>
                                 <div className="sticky top-0 z-20 bg-rose-50/95 backdrop-blur-sm pt-2 pb-4 shadow-sm">
                                     <div className="flex overflow-x-auto px-4 gap-3 no-scrollbar snap-x">
-                                        {Object.entries(itinerary).map(([key, day]) => (
+                                        {Object.entries(itinerary).sort((a, b) => {
+                                            const da = parseInt(a[0].replace('day', '')) || 0;
+                                            const db = parseInt(b[0].replace('day', '')) || 0;
+                                            return da - db;
+                                        }).map(([key, day]) => (
                                             <button key={key} onClick={() => setActiveTab(key)} className={`snap-center flex-shrink-0 px-5 py-2 rounded-2xl transition-all shadow-sm border font-cute tracking-wide flex flex-col items-center min-w-[80px] ${activeTab === key ? 'bg-gradient-to-br from-rose-500 to-pink-500 text-white border-transparent shadow-rose-200 shadow-md transform scale-105' : 'bg-white text-gray-500 border-gray-100'}`}>
                                                 <span className="text-[10px] opacity-80">{day.date}</span>
                                                 <span className="font-bold text-sm">{key === 'day5' ? '🎂 生日' : `Day ${key.replace('day', '')}`}</span>
@@ -568,3 +572,5 @@
     </script>
 </body>
 </html>
+
+
